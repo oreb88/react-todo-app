@@ -1,14 +1,14 @@
 import './TodoList.scss';
 import TodoListItem from './TodoListItem';
 
-const TodoList = () => {
-  return (
-    <div color="TodoList">
-      <TodoListItem />
-      <TodoListItem />
-      <TodoListItem />
-    </div>
-  );
+const TodoList = ({ todos, onRemove }) => {
+    return (
+        <div color="TodoList">
+            {todos.map((todo) => (
+                <TodoListItem todo={todo} key={todo.id} onRemove={onRemove} />
+            ))}
+        </div>
+    );
 };
 
 export default TodoList;

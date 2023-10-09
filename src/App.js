@@ -2,14 +2,56 @@ import './App.css';
 import TodoTemplate from './components/TodoTemplate';
 import TodoInsert from './components/TodoInsert';
 import TodoList from './components/TodoList';
+import { useCallback, useRef, useState } from 'react';
 
 function App() {
-  return (
-    <TodoTemplate>
-      <TodoInsert />
-      <TodoList />
-    </TodoTemplate>
-  );
+    const [todos, setTodos] = useState([
+        {
+            id: 1,
+            text: '리액트 기초 알아보기',
+            checked: true,
+        },
+        {
+            id: 2,
+            text: '컴포넌트 스타일링 해보기',
+            checked: true,
+        },
+        {
+            id: 3,
+            text: '일정 관리앱 만들어보기',
+            checked: false,
+        },
+    ]);
+
+    //고윳값으로 사용될 id
+    const nextId = useRef(4);
+
+    const onInsert = useCallback(
+        (text) => {
+            const todo = {
+                id: nextId.current,
+                text: text,
+                checked: false,
+            };
+
+            console.log(todo);
+
+            setTodos(todos.concat(todo));
+            nextId.current += 1;
+        },
+        [todos],
+    );
+
+    const onRemove = useCallback((id) => {
+        setTodos(todos.filter((todo) => todo.id !== id));
+    });
+
+    return (
+        <TodoTemplate>
+            <TodoInsert onInsert={onInsert} />
+            <TodoList todos={todos} onRemove={onRemove} />
+        </TodoTemplate>
+    );
 }
 
 export default App;
